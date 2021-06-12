@@ -1,7 +1,7 @@
 // code to build and initialize DB goes here
 const client = require("./client");
-
-const { createLink } = require("./index");
+const { createInitialUsers } = require("./createInitialUsers")
+const { createInitialLinks } = require("./createInitialLinks")
 
 async function buildTables() {
   try {
@@ -20,7 +20,8 @@ async function buildTables() {
 
     // build tables in correct order
     // create the least specific table first
-    await client.query(/*sql*/ `
+    console.log("createing tables")
+    await client.query(/*sql*/`
       CREATE TABLE users (
         id SERIAL PRIMARY KEY,
         username varchar(255) UNIQUE NOT NULL,
@@ -32,7 +33,7 @@ async function buildTables() {
         "authorId" INTEGER REFERENCES users(id),
         url varchar(255) UNIQUE NOT NULL,
         "clickCount" INTEGER DEFAULT 0,
-        "sharedDate" TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP, 
+        "sharedDate" TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
         active boolean DEFAULT true
       );
       CREATE TABLE tags(
@@ -47,7 +48,7 @@ async function buildTables() {
       CREATE TABLE comments(
         id SERIAL PRIMARY KEY,
         comment TEXT,
-        "createdDate" TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
+        "createdDate" DATE NOT NULL,
         "authorId" INTEGER REFERENCES users(id),
         "linkId" INTEGER REFERENCES links(id)
       );
@@ -56,16 +57,19 @@ async function buildTables() {
         "childId" INTEGER REFERENCES comments(id),
         UNIQUE ("parentId", "childId")
       );
-    `);
+    `)
+
   } catch (error) {
+    console.log("error creating tables")
     throw error;
   }
 }
 
 async function populateInitialData() {
   try {
+    await createInitialUsers()
+    await createInitialLinks()
     // create useful starting data
-    // await createLink({});
   } catch (error) {
     throw error;
   }
