@@ -2,27 +2,34 @@ const client = require("./client");
 
 async function getAllUsers() {
   try {
-  } catch (error) {}
+    const { rows: users } = await client.query(`
+      SELECT * FROM users;
+    `)
+    console.log('users', users)
+    return users
+  } catch (error) { }
 }
 
 async function createUser({ username, password }) {
   try {
-  } catch (error) {}
+  } catch (error) { }
 }
 
 async function updateUser(userId, fields = {}) {
   try {
-  } catch (error) {}
+  } catch (error) { }
 }
 
 async function getUserById(userId) {
   try {
-  } catch (error) {}
+  } catch (error) { }
 }
 
 async function getUserByUsername(username) {
   try {
-  } catch (error) {}
+  } catch (error) { }
 }
 
-module.exports = {};
+module.exports = {
+  getAllUsers
+};
