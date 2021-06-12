@@ -37,8 +37,3 @@ server.listen(PORT, async () => {
     console.error("Database is closed for repairs!\n", error);
   }
 });
-<<<<<<< HEAD
-
-//Hello
-=======
->>>>>>> 7e754271369a15d4bc9069f38f3aec6b64a0b6e1
