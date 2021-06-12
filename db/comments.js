@@ -5,7 +5,12 @@ async function getAllComments() {
   } catch (error) {}
 }
 
-async function createComment(comments) {
+async function createComment({comment, authorId, linkId}) {
+  try {
+  } catch (error) {}
+}
+
+async function getCommentsByLinkId(linkId) {
   try {
   } catch (error) {}
 }
@@ -15,7 +20,7 @@ async function createParentChildComment(parentId, childId) {
   } catch (error) {}
 }
 
-async function addCommentToLink(linkId, comments) {
+async function addChildToParent(parentId, childComments) {
   try {
   } catch (error) {}
 }
