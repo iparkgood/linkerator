@@ -1,9 +1,7 @@
 // code to build and initialize DB goes here
 const client = require("./client");
-
-const {
-  // other db methods
-} = require("./index");
+const { createInitialUsers } = require("./createInitialUsers")
+const { createInitialLinks } = require("./createInitialLinks")
 
 async function buildTables() {
   try {
@@ -22,7 +20,8 @@ async function buildTables() {
 
     // build tables in correct order
     // create the least specific table first
-    await client.query(/*sql*/ `
+    console.log("createing tables")
+    await client.query(/*sql*/`
       CREATE TABLE users (
         id SERIAL PRIMARY KEY,
         username varchar(255) UNIQUE NOT NULL,
@@ -34,8 +33,8 @@ async function buildTables() {
         "authorId" INTEGER REFERENCES users(id),
         url varchar(255) UNIQUE NOT NULL,
         "clickCount" INTEGER DEFAULT 0,
-        "sharedDate" DATE NOT NULL, 
-        active boolean DEFAULT true,
+        "sharedDate" TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
+        active boolean DEFAULT true
       );
       CREATE TABLE tags(
         id SERIAL PRIMARY KEY,
@@ -44,28 +43,32 @@ async function buildTables() {
       CREATE TABLE link_tags(
         "linkId" INTEGER REFERENCES links(id),
         "tagId" INTEGER REFERENCES tags(id),
-        UNIQUE ("postId", "tagId")
+        UNIQUE ("linkId", "tagId")
       );
       CREATE TABLE comments(
         id SERIAL PRIMARY KEY,
         comment TEXT,
         "createdDate" DATE NOT NULL,
         "authorId" INTEGER REFERENCES users(id),
-        "linkId" INTEGER REFERENCES links(id),
+        "linkId" INTEGER REFERENCES links(id)
       );
       CREATE TABLE parent_child_comments(
         "parentId" INTEGER REFERENCES comments(id),
         "childId" INTEGER REFERENCES comments(id),
-        UNIQUE ("postId", "tagId")
+        UNIQUE ("parentId", "childId")
       );
-    `);
+    `)
+
   } catch (error) {
+    console.log("error creating tables")
     throw error;
   }
 }
 
 async function populateInitialData() {
   try {
+    await createInitialUsers()
+    await createInitialLinks()
     // create useful starting data
   } catch (error) {
     throw error;
