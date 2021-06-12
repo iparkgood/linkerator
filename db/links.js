@@ -2,12 +2,32 @@ const client = require("./client");
 
 async function getAllLinks() {
   try {
-  } catch (error) {}
+    const { rows } = await client.query(/*sql*/ `
+      SELECT * FROM links;
+    `);
+
+    return rows;
+  } catch (error) {
+    throw error;
+  }
 }
 
-async function createLink({ authorId, url, sharedDate, clickCount }) {
+//I can add tags=[] as a parameter later
+async function createLink({ authorId, url }) {
   try {
-  } catch (error) {}
+    const { rows } = await client.query(
+      /*sql*/ `
+      INSERT INTO links("authorId", url)
+      VALUES($1, $2)
+      RETURNING *;
+    `,
+      [authorId, url]
+    );
+
+    return rows;
+  } catch (error) {
+    throw error;
+  }
 }
 
 async function updateLink(linkId, fields = {}) {
@@ -30,4 +50,7 @@ async function getLinkByTagName(tagName) {
   } catch (error) {}
 }
 
-module.exports = {};
+module.exports = {
+  getAllLinks,
+  createLink,
+};

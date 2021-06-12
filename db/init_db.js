@@ -1,9 +1,7 @@
 // code to build and initialize DB goes here
 const client = require("./client");
 
-const {
-  // other db methods
-} = require("./index");
+const { createLink } = require("./index");
 
 async function buildTables() {
   try {
@@ -34,8 +32,8 @@ async function buildTables() {
         "authorId" INTEGER REFERENCES users(id),
         url varchar(255) UNIQUE NOT NULL,
         "clickCount" INTEGER DEFAULT 0,
-        "sharedDate" DATE NOT NULL, 
-        active boolean DEFAULT true,
+        "sharedDate" TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP, 
+        active boolean DEFAULT true
       );
       CREATE TABLE tags(
         id SERIAL PRIMARY KEY,
@@ -44,19 +42,19 @@ async function buildTables() {
       CREATE TABLE link_tags(
         "linkId" INTEGER REFERENCES links(id),
         "tagId" INTEGER REFERENCES tags(id),
-        UNIQUE ("postId", "tagId")
+        UNIQUE ("linkId", "tagId")
       );
       CREATE TABLE comments(
         id SERIAL PRIMARY KEY,
         comment TEXT,
-        "createdDate" DATE NOT NULL,
+        "createdDate" TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
         "authorId" INTEGER REFERENCES users(id),
-        "linkId" INTEGER REFERENCES links(id),
+        "linkId" INTEGER REFERENCES links(id)
       );
       CREATE TABLE parent_child_comments(
         "parentId" INTEGER REFERENCES comments(id),
         "childId" INTEGER REFERENCES comments(id),
-        UNIQUE ("postId", "tagId")
+        UNIQUE ("parentId", "childId")
       );
     `);
   } catch (error) {
@@ -67,6 +65,7 @@ async function buildTables() {
 async function populateInitialData() {
   try {
     // create useful starting data
+    // await createLink({});
   } catch (error) {
     throw error;
   }
