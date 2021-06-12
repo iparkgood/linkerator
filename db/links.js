@@ -2,11 +2,11 @@ const client = require("./client");
 
 async function getAllLinks() {
   try {
-    const { rows } = await client.query(/*sql*/ `
+    const { rows: links } = await client.query(/*sql*/ `
       SELECT * FROM links;
     `);
 
-    return rows;
+    return links;
   } catch (error) {
     throw error;
   }
@@ -15,7 +15,9 @@ async function getAllLinks() {
 //I can add tags=[] as a parameter later
 async function createLink({ authorId, url }) {
   try {
-    const { rows } = await client.query(
+    const {
+      rows: [link],
+    } = await client.query(
       /*sql*/ `
       INSERT INTO links("authorId", url)
       VALUES($1, $2)
@@ -24,7 +26,7 @@ async function createLink({ authorId, url }) {
       [authorId, url]
     );
 
-    return rows;
+    return link;
   } catch (error) {
     throw error;
   }
@@ -42,7 +44,18 @@ async function getLinkByUser(userId) {
 
 async function getLinkById(linkId) {
   try {
-  } catch (error) {}
+    const {
+      rows: [link],
+    } = await client.query(
+      /*sql*/ `
+      SELECT * FROM links WHERE id=$1;
+    `,
+      [linkId]
+    );
+
+  } catch (error) {
+    throw error;
+  }
 }
 
 async function getLinkByTagName(tagName) {
@@ -53,4 +66,5 @@ async function getLinkByTagName(tagName) {
 module.exports = {
   getAllLinks,
   createLink,
+  getLinkById,
 };

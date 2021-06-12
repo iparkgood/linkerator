@@ -1,7 +1,7 @@
 // code to build and initialize DB goes here
 const client = require("./client");
-const { createInitialUsers } = require("./createInitialUsers")
-const { createInitialLinks } = require("./createInitialLinks")
+const { createInitialUsers } = require("./createInitialUsers");
+const { createInitialLinks } = require("./createInitialLinks");
 
 async function buildTables() {
   try {
@@ -20,8 +20,8 @@ async function buildTables() {
 
     // build tables in correct order
     // create the least specific table first
-    console.log("createing tables")
-    await client.query(/*sql*/`
+    console.log("createing tables");
+    await client.query(/*sql*/ `
       CREATE TABLE users (
         id SERIAL PRIMARY KEY,
         username varchar(255) UNIQUE NOT NULL,
@@ -57,19 +57,18 @@ async function buildTables() {
         "childId" INTEGER REFERENCES comments(id),
         UNIQUE ("parentId", "childId")
       );
-    `)
-
+    `);
   } catch (error) {
-    console.log("error creating tables")
+    console.log("error creating tables");
     throw error;
   }
 }
 
 async function populateInitialData() {
   try {
-    await createInitialUsers()
-    await createInitialLinks()
-    // create useful starting data
+    await createInitialUsers();
+    await createInitialLinks();
+
   } catch (error) {
     throw error;
   }
