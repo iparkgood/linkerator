@@ -11,7 +11,7 @@ async function getAllUsers() {
     const { rows: users } = await client.query(`
       SELECT * FROM users;
     `)
-    console.log('users', users)
+    
     return users
   } catch (error) {
     console.log("Error in getAllUsers")
