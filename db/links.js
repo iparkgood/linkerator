@@ -13,13 +13,13 @@ async function getAllLinks() {
 }
 
 //I can add tags=[] as a parameter later
-async function createLink({ authorId, url }) {
+async function createLink({ authorId, url, description, tags=[], comments=[] }) {
   try {
     const {
       rows: [link],
     } = await client.query(
       /*sql*/ `
-      INSERT INTO links("authorId", url)
+      INSERT INTO links("authorId", url, description)
       VALUES($1, $2)
       RETURNING *;
     `,
