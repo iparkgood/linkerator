@@ -48,7 +48,7 @@ async function buildTables() {
       CREATE TABLE comments(
         id SERIAL PRIMARY KEY,
         comment TEXT,
-        "createdDate" DATE NOT NULL,
+        "createdDate" TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
         "authorId" INTEGER REFERENCES users(id),
         "linkId" INTEGER REFERENCES links(id)
       );
