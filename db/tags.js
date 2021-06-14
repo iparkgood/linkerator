@@ -10,7 +10,8 @@ async function getAllTags() {
 
     return tags;
   } catch (error) {
-    throw error;
+    console.log("Error in getAllTags");
+    console.error(error);
   }
 }
 
@@ -43,7 +44,8 @@ async function createTags(tagList) {
 
     return tags;
   } catch (error) {
-    throw error;
+    console.log("Error in createTags");
+    console.error(error);
   }
 }
 
@@ -58,23 +60,25 @@ async function createLinkTag(linkId, tagId) {
       [linkId, tagId]
     );
   } catch (error) {
-    throw error;
+    console.log("Error in createLinkTag");
+    console.error(error);
   }
 }
 
-async function addTagToLink(linkId, tagList) {
-  try {
-    const createPostTagPromises = tagList.map((tag) =>
-      createLinkTag(linkId, tag.id)
-    );
+// async function addTagToLink(linkId, tagList) {
+//   try {
+//     const createPostTagPromises = tagList.map((tag) =>
+//       createLinkTag(linkId, tag.id)
+//     );
 
-    await Promise.all(createPostTagPromises);
+//     await Promise.all(createPostTagPromises);
 
-    return await getLinkById(linkId);
-  } catch (error) {
-    throw error;
-  }
-}
+//     return await getLinkById(linkId);
+//   } catch (error) {
+//     console.log("Error in addTagToLink");
+//     console.error(error);
+//   }
+// }
 
 module.exports = {
   getAllTags,

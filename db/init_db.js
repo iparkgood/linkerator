@@ -32,7 +32,6 @@ async function buildTables() {
         id SERIAL PRIMARY KEY,
         "authorId" INTEGER REFERENCES users(id),
         url varchar(255) UNIQUE NOT NULL,
-        description TEXT,
         "clickCount" INTEGER DEFAULT 0,
         "sharedDate" TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
         active boolean DEFAULT true
