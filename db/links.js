@@ -18,7 +18,7 @@ async function getAllLinks() {
 }
 
 //I can add tags=[] as a parameter later
-async function createLink({ authorId, url, tags = [], comments = [] }) {
+async function createLink({ authorId, url, tags = [] }) {
   try {
     const {
       rows: [link],
@@ -34,9 +34,6 @@ async function createLink({ authorId, url, tags = [], comments = [] }) {
     //tags = createTags
     //addTagsToLink --> instead tags.map((tag) => createLinkTag(link.id, tag.id))
 
-    //createComments
-    //
-
     //return await getLinkbyId(link.id)
 
     return link;
@@ -48,7 +45,6 @@ async function createLink({ authorId, url, tags = [], comments = [] }) {
 
 async function updateLink(linkId, fields = {}) {
   try {
-    //
   } catch (error) {
     console.log("Error in updateLink");
     console.error(error);
@@ -102,9 +98,11 @@ async function getLinkById(linkId) {
 
     // const { rows: comments } = await getCommentsByLinkId(linkId)
 
-    const {rows: [author]} = await client.query(/*sql*/`
+    const {
+      rows: [author],
+    } = await client.query(/*sql*/ `
       SELECT * FROM users WHERE id=link.authorId;
-    `)
+    `);
 
     link.tags = tags;
     link.author = author;

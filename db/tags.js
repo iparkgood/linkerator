@@ -1,6 +1,6 @@
 const client = require("./client");
 
-const { getLinkById } = require("./links");
+// const { getLinkById } = require("./links");
 
 async function getAllTags() {
   try {
