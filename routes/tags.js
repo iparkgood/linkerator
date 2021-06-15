@@ -1,14 +1,19 @@
 const tagsRouter = require("express").Router();
-const { getAllTags } = require("../db");
-const { getTagsByLinkId, createTag } = require("../db/tags");
+const {
+  getAllTags,
+  getTagsByLinkId,
+  createTag,
+  getLinksByTag,
+} = require("../db");
 
-//get
+//get all tags
 tagsRouter.get("/", async (req, res) => {
   const allTags = await getAllTags();
 
   res.send(allTags);
 });
 
+//get tags by LinkId
 tagsRouter.get("/:linkId", async (req, res) => {
   const { linkId } = req.params;
   const allTags = await getTagsByLinkId(linkId);
@@ -16,8 +21,12 @@ tagsRouter.get("/:linkId", async (req, res) => {
   res.send(allTags);
 });
 
+//get links by tag
 tagsRouter.get("/:tag/links", async (req, res) => {
-  
+  const { tag } = req.params;
+  const links = await getLinksByTag(tag);
+
+  res.send(links);
 });
 
 //post
