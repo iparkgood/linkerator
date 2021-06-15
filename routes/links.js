@@ -5,8 +5,10 @@ const { getAllLinks, createLink, updateLink } = require("../db");
 linksRouter.get("/", async (req, res, next) => {
   try {
     const allLinks = await getAllLinks();
-
-  res.send(allLinks);
+    res.send(allLinks);
+  } catch (error) {
+    console.error(error)
+  }
 });
 
 //post
