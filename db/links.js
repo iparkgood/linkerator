@@ -105,7 +105,7 @@ async function getLinksByTag(tag) {
       [tag]
     );
 
-    return await Promise.all(linkIds.map((linkId) => getLinkById(linkId)));
+    return await Promise.all(linkIds.map((link) => getLinkById(link.fields)));
   } catch (error) {
     console.log("Error in getLinkByTag");
     console.error(error);
