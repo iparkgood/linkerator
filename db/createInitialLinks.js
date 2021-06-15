@@ -1,5 +1,3 @@
-const client = require("./client");
-
 const { createLink } = require("./index");
 
 const createInitialLinks = async () => {
