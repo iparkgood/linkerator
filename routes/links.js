@@ -1,30 +1,21 @@
 const linksRouter = require("express").Router();
 
-const { getAllLinks, createLink, updateLink, getLinkById } = require("../db");
+const { getAllLinks, createLink, updateLink } = require("../db");
 
 linksRouter.get("/", async (req, res) => {
   const allLinks = await getAllLinks();
 
-  res.send({ allLinks });
+  res.send(allLinks);
 });
 
 //post
 linksRouter.post("/", async (req, res) => {
-  const { url, tags = "" } = req.body;
-
-  const tagArr = tags.trim().split(/\s+/);
-  const linkObj = {};
-
-  if (tagArr.length) {
-    linkObj.tags = tagArr;
-  }
+  const { url } = req.body;
 
   try {
-    linkObj.url = url;
+    const newLink = await createLink({ url });
 
-    const link = await createLink(linkObj);
-
-    res.send({ link });
+    res.send(newLink);
   } catch (error) {
     console.error(error);
   }
@@ -33,22 +24,12 @@ linksRouter.post("/", async (req, res) => {
 //patch
 linksRouter.patch("/:linkId", async (req, res) => {
   const { linkId } = req.params;
-  const { url, tags } = req.body;
-
-  const updateFields = {};
-
-  if (tags && tags.length > 0) {
-    updateFields.tags = tags.trim().split(/\s+/);
-  }
-
-  if (url) {
-    updateFields.url = url;
-  }
+  const { url } = req.body;
 
   try {
-    const updatedLink = await updateLink(linkId, updateFields);
+    const updatedLink = await updateLink(linkId, { url: url });
 
-    res.send({ link: updatedLink });
+    res.send(updatedLink);
   } catch (error) {
     console.error(error);
   }
@@ -60,7 +41,7 @@ linksRouter.delete("/:linkId", async (req, res) => {
 
   const deletedLink = await updateLink(linkId, { active: false });
 
-  res.send({ link: deletedLink });
+  res.send(deletedLink);
 });
 
 module.exports = linksRouter;

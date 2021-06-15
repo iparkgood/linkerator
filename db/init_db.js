@@ -1,6 +1,6 @@
 // code to build and initialize DB goes here
 const client = require("./client");
-// const { createInitialUsers } = require("./createInitialUsers");
+
 const { createInitialLinks } = require("./createInitialLinks");
 
 async function buildTables() {
@@ -51,7 +51,6 @@ async function buildTables() {
 
 async function populateInitialData() {
   try {
-    await createInitialUsers();
     await createInitialLinks();
   } catch (error) {
     throw error;
