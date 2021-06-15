@@ -13,7 +13,7 @@ async function getAllTags() {
   }
 }
 
-async function createTags(linkId, tag) {
+async function createTag(linkId, tag) {
   try {
     await client.query(
       /*sql*/ `
@@ -79,7 +79,7 @@ async function getTagsByLinkId(linkId) {
 
 module.exports = {
   getAllTags,
-  createTags,
+  createTag,
   createLinkTag,
   getTagsByLinkId
 };
