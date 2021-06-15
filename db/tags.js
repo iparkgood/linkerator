@@ -83,6 +83,5 @@ async function createLinkTag(linkId, tagId) {
 module.exports = {
   getAllTags,
   createTags,
-  createLinkTag,
-  addTagToLink,
+  createLinkTag
 };

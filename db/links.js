@@ -18,17 +18,17 @@ async function getAllLinks() {
   }
 }
 
-async function createLink({ authorId, url, tags = [] }) {
+async function createLink({ url, tags = [] }) {
   try {
     const {
       rows: [link],
     } = await client.query(
       /*sql*/ `
-      INSERT INTO links("authorId", url)
-      VALUES($1, $2)
+      INSERT INTO links(url)
+      VALUES($1)
       RETURNING *;
     `,
-      [authorId, url]
+      [url]
     );
 
     const tagList = await createTags(tags);
@@ -89,26 +89,6 @@ async function updateLink(linkId, fields = {}) {
   }
 }
 
-async function getLinksByUser(userId) {
-  try {
-    const { rows: linkIds } = await client.query(
-      /*sql*/ `
-      SELECT id FROM links WHERE "authorId"=$1
-    `,
-      [userId]
-    );
-
-    const links = await Promise.all(
-      linkIds.map((linkId) => getLinkById(linkId))
-    );
-
-    return links;
-  } catch (error) {
-    console.log("Error in getLinksByUser");
-    console.error(error);
-  }
-}
-
 async function getLinkById(linkId) {
   try {
     const {
@@ -136,17 +116,8 @@ async function getLinkById(linkId) {
 
     // const { rows: comments } = await getCommentsByLinkId(linkId)
 
-    const {
-      rows: [author],
-    } = await client.query(/*sql*/ `
-      SELECT * FROM users WHERE id=link.authorId;
-    `);
-
     link.tags = tags;
-    link.author = author;
     // link.comments = comments;
-
-    delete link.authorId;
 
     return link;
   } catch (error) {
@@ -169,7 +140,7 @@ async function getLinkByTag(tag) {
     );
 
     return await Promise.all(linkIds.map((link) => getLinkById(link.id)));
-    
+
   } catch (error) {
     console.log("Error in getLinkByTag");
     console.error(error);
@@ -193,6 +164,5 @@ module.exports = {
   getLinkById,
   updateClickCount,
   getLinkByTag,
-  getLinksByUser,
   updateLink,
 };
