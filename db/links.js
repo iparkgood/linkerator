@@ -1,14 +1,15 @@
 const client = require("./client");
+const { createTags, createLinkTag } = require("./tags");
 
 async function getAllLinks() {
   try {
-    const { rows: links } = await client.query(/*sql*/ `
-      SELECT * FROM links;
+    const { rows: linkIds } = await client.query(/*sql*/ `
+      SELECT id FROM links;
     `);
 
-    //I will change to only retrieve linkIds
-    //map over to linkIds and use getLinkById to return links
-    //including tags, and comments
+    const links = await Promise.all(
+      linkIds.map((linkId) => getLinkById(linkId))
+    );
 
     return links;
   } catch (error) {
@@ -17,26 +18,23 @@ async function getAllLinks() {
   }
 }
 
-//I can add tags=[] as a parameter later
 async function createLink({ authorId, url, tags = [] }) {
   try {
     const {
       rows: [link],
     } = await client.query(
       /*sql*/ `
-      INSERT INTO links("authorId", url, description)
+      INSERT INTO links("authorId", url)
       VALUES($1, $2)
       RETURNING *;
     `,
       [authorId, url]
     );
 
-    //tags = createTags
-    //addTagsToLink --> instead tags.map((tag) => createLinkTag(link.id, tag.id))
+    const tagList = await createTags(tags);
+    tagList.map((tag) => await createLinkTag(linkId, tag.id));
 
-    //return await getLinkbyId(link.id)
-
-    return link;
+    return await getLinkbyId(link.id);
   } catch (error) {
     console.log("Error in createLink");
     console.error(error);
@@ -44,7 +42,47 @@ async function createLink({ authorId, url, tags = [] }) {
 }
 
 async function updateLink(linkId, fields = {}) {
+  const { tags } = fields;
+  delete fields.tags;
+
+  const setString = Object.keys(fields)
+    .map((key, idx) => `"${key}"=$${idx + 1}`)
+    .join(", ");
+  //"key"=$1
+
   try {
+    if (setString.length > 0) {
+      await client.query(
+        /*sql*/ `
+        UPDATE links
+        SET ${setString}
+        WHERE id=${linkId}
+        RETURNING *;
+      `,
+        Object.values(fields)
+      );
+    }
+
+    if (tags === undefined) {
+      return await getLinkById(linkId);
+    }
+
+    const tagList = await createTags(tags);
+    const tagListIdString = tagList.map((tag) => `${tag.id}`).join(", ");
+
+    await client.query(
+      /*sql*/ `
+      DELETE FROM link_tags
+      WHERE "tagId"
+      NOT IN (${tagListIdString})
+      AND "linkId"=$1;
+    `,
+      [linkId]
+    );
+
+    tagList.map((tag) => await createLinkTag(linkId, tag.id));
+
+    return await getLinkById(linkId);
   } catch (error) {
     console.log("Error in updateLink");
     console.error(error);
@@ -53,16 +91,16 @@ async function updateLink(linkId, fields = {}) {
 
 async function getLinksByUser(userId) {
   try {
-    const { rows: links } = await client.query(
+    const { rows: linkIds } = await client.query(
       /*sql*/ `
-      SELECT * FROM links WHERE "authorId"=$1
+      SELECT id FROM links WHERE "authorId"=$1
     `,
       [userId]
     );
 
-    //I will change to only retrieve linkIds
-    //map over to linkIds and use getLinkById to return links
-    //including tags, and comments
+    const links = await Promise.all(
+      linkIds.map((linkId) => getLinkById(linkId))
+    );
 
     return links;
   } catch (error) {
@@ -119,14 +157,42 @@ async function getLinkById(linkId) {
 
 async function getLinkByTag(tag) {
   try {
+    const { rows: linkIds } = await client.query(
+      /*sql*/ `
+      SELECT links.id
+      FROM links
+      JOIN link_tags ON links.id=links_tags."linkId"
+      jOIN tags ON tags.id=link_tags."tagId"
+      WHERE tags.tag=$1;
+    `,
+      [tag]
+    );
+
+    return await Promise.all(linkIds.map((link) => getLinkById(link.id)));
+    
   } catch (error) {
     console.log("Error in getLinkByTag");
     console.error(error);
   }
 }
 
+async function updateClickCount(linkId) {
+  await client.query(
+    /*sql*/ `
+    UPDATE links SET "clickCount"="clickCount"+1
+    WHERE id=$1
+    RETURNING *;
+  `,
+    [linkId]
+  );
+}
+
 module.exports = {
   getAllLinks,
   createLink,
   getLinkById,
+  updateClickCount,
+  getLinkByTag,
+  getLinksByUser,
+  updateLink,
 };
