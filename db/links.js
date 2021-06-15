@@ -22,8 +22,7 @@ async function createLink({ authorId, url, tags = [] }) {
   try {
     const {
       rows: [link],
-    } = await client.query(
-      /*sql*/ `
+    } = await client.query(/*sql*/ `
       INSERT INTO links("authorId", url, description)
       VALUES($1, $2)
       RETURNING *;
