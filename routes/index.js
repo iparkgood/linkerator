@@ -8,5 +8,6 @@ apiRouter.get("/", (req, res, next) => {
 
 apiRouter.use("/links", require("./links"));
 apiRouter.use("/tags", require("./tags"));
+apiRouter.use("/comments", require("./comments"));
 
 module.exports = apiRouter;
