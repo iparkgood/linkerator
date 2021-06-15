@@ -12,16 +12,13 @@ async function getAllComments() {
   }
 }
 
-async function createComment({ comment, authorId, linkId }) {
+async function createComment({ comment, linkId }) {
   try {
-    //Do we need to also add a row to parent_child_comments or will that 
-    //get updated automaticly on row insertion here?
-
     const { rows: newComment } = await client.query(`
-      INSERT INTO comments(comment, "authorId", "linkId")
+      INSERT INTO comments(comment, "linkId")
       VALUES ($1, $2, $3)
       RETURNING *;
-    `, [comment, authorId, linkId])
+    `, [comment, linkId])
     return newComment
   } catch (error) {
     console.log("Error from createComment")
@@ -42,30 +39,8 @@ async function getCommentsByLinkId(linkId) {
   }
 }
 
-async function createParentChildComment(parentId, childId) {
-  try {
-    //Might need to consider a check to see if this is a new comment thread
-    //If it is its the parent otherwise its the child
-    
-  } catch (error) {
-    console.log("Error from createParentChildComment")
-    console.dir(error)
-  }
-}
-
-async function addChildToParent(parentId, childComments) {
-  try {
-
-  } catch (error) {
-    console.log("Error from addChildToParent")
-    console.dir(error)
-  }
-}
-
 module.exports = {
   getAllComments,
   createComment,
-  getCommentsByLinkId,
-  createParentChildComment,
-  addChildToParent
+  getCommentsByLinkId
 };
