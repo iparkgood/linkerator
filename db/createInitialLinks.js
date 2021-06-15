@@ -1,33 +1,14 @@
 const client = require("./client");
 
-const { getAllUsers } = require("./index");
-const { createLink } = require("./links");
+const { createLink } = require("./index");
 
 const createInitialLinks = async () => {
   try {
-    const users = await getAllUsers();
     console.log("Creating Links");
-    await client.query(
-      `
-      INSERT INTO links("authorId", url)
-      VALUES ($1, $2);
-    `,
-      [users[0].id, "https://github.com/"]
-    );
-    await client.query(
-      `
-      INSERT INTO links("authorId", url)
-      VALUES ($1, $2);
-    `,
-      [users[1].id, "https://www.google.com/"]
-    );
-    await client.query(
-      `
-      INSERT INTO links("authorId", url)
-      VALUES ($1, $2);
-    `,
-      [users[2].id, "https://slack.com/"]
-    );
+    await createLink("https://github.com/")
+    await createLink("https://www.google.com/")
+    const link = await createLink("https://slack.com/")
+    console.log("link", link)
 
     //createLink({ authorId, url, tags=[], comments=[] })
     // await createLink({

@@ -24,8 +24,7 @@ async function createTags(tagList) {
   const selectValues = tagList.map((_, index) => `$${index + 1}`).join(", ");
 
   try {
-    await client.query(
-      /*sql*/ `
+    await client.query(/*sql*/ `
       INSERT INTO tags(tag)
       VALUES (${insertValues}) 
       ON CONFLICT (tag) DO NOTHING;
@@ -33,8 +32,7 @@ async function createTags(tagList) {
       tagList
     );
 
-    const { rows: tags } = await client.query(
-      /*sql*/ `
+    const { rows: tags } = await client.query(/*sql*/ `
       SELECT * FROM tags
       WHERE tag
       IN (${selectValues});
@@ -84,5 +82,5 @@ module.exports = {
   getAllTags,
   createTags,
   createLinkTag,
-  addTagToLink,
+  //addTagToLink,
 };
