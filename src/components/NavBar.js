@@ -5,7 +5,7 @@ import { fade, makeStyles } from '@material-ui/core/styles';
 const useStyles = makeStyles((theme) => ({
   flex: {
     display: "flex",
-    justifyContent: "space-between"
+    justifyContent: "space-between",
   },
   searchBar: {
     position: "relative",
@@ -22,7 +22,7 @@ const NavBar = () => {
   const classes = useStyles()
 
   return (
-    <AppBar>
+    <AppBar position="sticky">
       <Toolbar className={classes.flex}>
         <h1>The Great Linkerator</h1>
         <div className={classes.searchBar}>
