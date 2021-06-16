@@ -39,6 +39,8 @@ tagsRouter.post("/:linkId", async (req, res) => {
 });
 
 //delete
-tagsRouter.delete("/:linkId", async (req, res) => {});
+tagsRouter.delete("/:linkId", async (req, res) => {
+  
+});
 
 module.exports = tagsRouter;
