@@ -12,11 +12,11 @@ async function getAllComments() {
   }
 }
 
-async function createComment({ comment, linkId }) {
+async function createComment(comment, linkId) {
   try {
     const { rows: newComment } = await client.query(`
       INSERT INTO comments(comment, "linkId")
-      VALUES ($1, $2, $3)
+      VALUES ($1, $2)
       RETURNING *;
     `, [comment, linkId])
     return newComment

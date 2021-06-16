@@ -1,52 +1,46 @@
 import React, { useState, useEffect } from 'react';
-import { AppBar, Toolbar, InputBase } from '@material-ui/core';
-import { fade, makeStyles } from '@material-ui/core/styles';
 
-// import {
-//   getSomething
-// } from '../api';
+import {
+  getAllLinks
+} from '../api';
 
-const useStyles = makeStyles((theme) => ({
-  flex: {
-    display: "flex",
-    justifyContent: "space-between"
-  },
-  searchBar: {
-    position: "relative",
-    borderRadius: "5px",
-    backgroundColor: fade("rgb(0,0,0)", 0.15),
-    paddingLeft: "8px",
-  },
-  searchInput: {
-    color: "inherit"
-  },
-}))
+import NavBar from "./NavBar"
 
 
 const App = () => {
-  const classes = useStyles()
   const [message, setMessage] = useState('');
+  const [links, setLinks] = useState(false)
 
-  // useEffect(() => {
-  //   getSomething()
-  //     .then(response => {
-  //       setMessage(response.message);
-  //     })
-  //     .catch(error => {
-  //       setMessage(error.message);
-  //     });
-  // });
+  useEffect(() => {
+    getAllLinks()
+    .then(response => {
+      setLinks(response);
+    })
+    .catch(error => {
+      setMessage(error.message);
+    });
+  }, []);
 
   return (
     <div className="App">
-      <AppBar>
-        <Toolbar className={classes.flex}>
-          <h1>The Great Linkerator</h1>
-          <div className={classes.searchBar}>
-            <InputBase className={classes.searchInput} placeholder="Search..." />
-          </div>
-        </Toolbar>
-      </AppBar>
+      <NavBar />
+      <div style={{display: "flex", flexWrap: "wrap", justifyContent: "space-between"}}>
+        {(links) && links.map(link => {
+          return (
+            <div key={link.id} style={{flexBasis: "250px", boxShadow: "rgba(0, 0, 0, 0.24) 0px 3px 8px"}}>
+              <h2>{link.url}</h2>
+              <p>Click Count: {link.clickCount}</p>
+              <p>Date Shared: {link.sharedDate}</p>
+              <div>Tags:
+                {/* {link.tags.map(tag => <p>{tag}</p>)} */}
+              </div>
+              <div>Comments:
+                {link.comments.map(com => <p>{com.comment}</p>)}
+              </div>
+            </div>
+          )
+        })}
+      </div>
       <h2>{message}</h2>
     </div>
   );

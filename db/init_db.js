@@ -1,7 +1,7 @@
 // code to build and initialize DB goes here
 const client = require("./client");
-
 const { createInitialLinks } = require("./createInitialLinks");
+const { createInitialComments } = require("./createInitialComments");
 
 async function buildTables() {
   try {
@@ -24,8 +24,7 @@ async function buildTables() {
         id SERIAL PRIMARY KEY,
         url varchar(255) UNIQUE NOT NULL,
         "clickCount" INTEGER DEFAULT 0,
-        "sharedDate" TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
-        active boolean DEFAULT true
+        "sharedDate" TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP
       );
       CREATE TABLE tags(
         id SERIAL PRIMARY KEY,
@@ -52,6 +51,7 @@ async function buildTables() {
 async function populateInitialData() {
   try {
     await createInitialLinks();
+    await createInitialComments();
   } catch (error) {
     throw error;
   }
