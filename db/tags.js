@@ -15,8 +15,7 @@ async function getAllTags() {
 
 async function createTag(linkId, tag) {
   try {
-    await client.query(
-      /*sql*/ `
+    await client.query(/*sql*/ `
       INSERT INTO tags(tag)
       VALUES ($1) 
       ON CONFLICT (tag) DO NOTHING;

@@ -1,6 +1,4 @@
-const client = require("./client");
-
-const { createLink } = require("./links");
+const { createLink } = require("./index");
 
 const createInitialLinks = async () => {
   try {
