@@ -19,7 +19,7 @@ const App = () => {
     .catch(error => {
       setMessage(error.message);
     });
-  });
+  }, []);
 
   return (
     <div className="App">
