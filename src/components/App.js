@@ -25,10 +25,10 @@ const App = () => {
   return (
     <div className="App">
       <NavBar />
-      <Grid style={{'margin-top': "8px"}} container spacing={3}>
-        {(links) && links.map(link => {
+      <Grid style={{marginTop:"8px"}} container spacing={3}>
+        {(links) && links.map((link, idx) => {
           return (
-            <Grid item xs={6}>
+            <Grid item xs={6} key={idx + 1}>
               <LinkCard link={link} />
             </Grid>
           )

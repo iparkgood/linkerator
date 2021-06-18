@@ -2,7 +2,7 @@ const client = require("./client");
 
 async function getAllTags() {
   try {
-    const { rows: tags } = client.query(/*sql*/ `
+    const { rows: tags } = await client.query(/*sql*/ `
       SELECT * FROM tags;
     `);
 
@@ -18,19 +18,13 @@ async function createTag(linkId, tag) {
     await client.query(/*sql*/ `
       INSERT INTO tags(tag)
       VALUES ($1) 
-      ON CONFLICT (tag) DO NOTHING;
+      ON CONFLICT (tag) DO NOTHING
+      RETURNING *;
     `,
       [tag]
     ); //create a new tag in tags table
 
-    const { rows: newTag } = await client.query(
-      /*sql*/ `
-      SELECT * FROM tags
-      WHERE tag
-      IN ($1);
-    `,
-      [tag]
-    ); //select all from tags about the new tag
+    const newTag = rows[0];
 
     await createLinkTag(linkId, newTag.id);
     //create a new row in link_tags table

@@ -76,14 +76,14 @@ async function getLinkById(linkId) {
 
     const tags = await getTagsByLinkId(linkId);
 
-    const comments = await getCommentsByLinkId(linkId);
+    // const comments = await getCommentsByLinkId(linkId);
 
     if (tags) {
       link.tags = tags;
     }
-    if (comments) {
-      link.comments = comments;
-    }
+    // if (comments) {
+    //   link.comments = comments;
+    // }
 
     return link;
   } catch (error) {
@@ -98,14 +98,14 @@ async function getLinksByTag(tag) {
       /*sql*/ `
       SELECT links.id
       FROM links
-      JOIN link_tags ON links.id=links_tags."linkId"
-      jOIN tags ON tags.id=link_tags."tagId"
+      JOIN link_tags ON links.id=link_tags."linkId"
+      JOIN tags ON tags.id=link_tags."tagId"
       WHERE tags.tag=$1;
     `,
       [tag]
     );
 
-    return await Promise.all(linkIds.map((link) => getLinkById(link.fields)));
+    return await Promise.all(linkIds.map((link) => getLinkById(link.id)));
   } catch (error) {
     console.log("Error in getLinkByTag");
     console.error(error);
@@ -113,7 +113,7 @@ async function getLinksByTag(tag) {
 }
 
 async function updateClickCount(linkId) {
-  await client.query(
+  const { rows } = await client.query(
     /*sql*/ `
     UPDATE links SET "clickCount"="clickCount"+1
     WHERE id=$1
@@ -121,6 +121,10 @@ async function updateClickCount(linkId) {
   `,
     [linkId]
   );
+
+  const result = rows[0];
+
+  return result;
 }
 
 module.exports = {
@@ -130,4 +134,5 @@ module.exports = {
   updateClickCount,
   getLinksByTag,
   updateLink,
+  updateClickCount,
 };
