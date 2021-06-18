@@ -7,6 +7,8 @@ import {
 
 import { NavBar, LinkCard } from "./index"
 
+const addingTheHiddenField = (links) => links.map(link => ({...link, isHidden: false}))
+
 
 const App = () => {
   const [message, setMessage] = useState('');
@@ -15,7 +17,10 @@ const App = () => {
   useEffect(() => {
     getAllLinks()
       .then(response => {
-        setLinks(response);
+        return addingTheHiddenField(response)
+      })
+      .then(newObject => {
+        setLinks(newObject);
       })
       .catch(error => {
         setMessage(error.message);
@@ -24,10 +29,11 @@ const App = () => {
 
   return (
     <div className="App">
-      <NavBar />
+      <NavBar setLinks={setLinks} />
       <Grid style={{'margin-top': "8px"}} container spacing={3}>
         {(links) && links.map(link => {
-          return (
+          return (link.isHidden) ? "" :
+          (
             <Grid item xs={6}>
               <LinkCard link={link} />
             </Grid>
