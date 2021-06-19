@@ -86,14 +86,14 @@ async function getLinkById(linkId) {
 
     const tags = await getTagsByLinkId(linkId);
 
-    // const comments = await getCommentsByLinkId(linkId);
+    const comments = await getCommentsByLinkId(linkId);
 
     if (tags) {
       link.tags = tags;
     }
-    // if (comments) {
-    //   link.comments = comments;
-    // }
+    if (comments) {
+      link.comments = comments;
+    }
 
     return link;
   } catch (error) {
