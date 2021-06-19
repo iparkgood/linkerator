@@ -5,9 +5,12 @@ import {
   CardContent,
   Button,
   Typography,
+  IconButton,
+  Link,
 } from "@material-ui/core";
+import AddIcon from "@material-ui/icons/Add";
 
-import { incrementClickCount } from "../api";
+import { incrementClickCount, createNewTag } from "../api";
 
 const LinkCard = ({ link }) => {
   // console.log(link);
@@ -23,34 +26,38 @@ const LinkCard = ({ link }) => {
   return (
     <Card elevation={2}>
       <CardContent key={link.id}>
-        <Typography variant="h4">
-          <a
-            href={link.url}
-            target="_blank"
-            onClick={handleCount}
-            rel="noopener noreferrer"
-            style={{ textDecoration: "none" }}
-          >
-            {link.url}
-          </a>
-        </Typography>
+        <Link
+          href={link.url}
+          target="_blank"
+          onClick={handleCount}
+          rel="noopener noreferrer"
+          variant="h4"
+        >
+          {link.url}
+        </Link>
+
         <Typography variant="subtitle1" color="textSecondary" gutterBottom>
           {count} clicks since {link.sharedDate}
         </Typography>
+
         <Typography component="div">
           Tags:
           {link.tags.map((tag) => (
             <Button>{tag}</Button>
           ))}
+          <IconButton>
+            <AddIcon color="secondary" fontSize="small" />
+          </IconButton>
         </Typography>
-        <Typography component="div">Comment: {link.comment}</Typography>
-        {/* <div>
-          Comments:
-          {link.comments.map((com) => (
-            <p>{com.comment}</p>
-          ))}
-        </div> */}
+
+        <Typography component="div">
+          Comment: {link.comment}
+          <IconButton>
+            <AddIcon color="secondary" fontSize="small" />
+          </IconButton>
+        </Typography>
       </CardContent>
+
       <CardActions>
         <Button variant="outlined" color="secondary" size="small">
           Edit
