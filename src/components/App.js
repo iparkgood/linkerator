@@ -35,7 +35,7 @@ const App = () => {
             return (link.isHidden) ? "" :
               (
                 <Grid item xs={6}>
-                  <LinkCard link={link} />
+                  <LinkCard link={link} setLinks={setLinks} />
                 </Grid>
               )
           })}
