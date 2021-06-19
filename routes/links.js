@@ -3,8 +3,8 @@ const linksRouter = require("express").Router();
 const {
   getAllLinks,
   createLink,
-  updateLink,
   updateClickCount,
+  updateLink,
 } = require("../db");
 
 linksRouter.get("/", async (req, res, next) => {
@@ -45,13 +45,13 @@ linksRouter.patch("/:linkId", async (req, res) => {
 });
 
 //delete
-linksRouter.delete("/:linkId", async (req, res) => {
-  const { linkId } = req.params;
+// linksRouter.delete("/:linkId", async (req, res) => {
+//   const { linkId } = req.params;
 
-  const deletedLink = await updateLink(linkId, { active: false });
+//   const deletedLink = await updateLink(linkId, { active: false });
 
-  res.send(deletedLink);
-});
+//   res.send(deletedLink);
+// });
 
 //update count
 linksRouter.patch("/:linkId/count", async (req, res) => {

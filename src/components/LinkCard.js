@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+
 import {
   Card,
   CardActions,
@@ -10,7 +11,7 @@ import {
 } from "@material-ui/core";
 import AddIcon from "@material-ui/icons/Add";
 
-import { AddTagComment } from "./index";
+import { AddTagComment, ModalForm } from "./index";
 
 import { incrementClickCount } from "../api";
 
@@ -20,6 +21,7 @@ const LinkCard = ({ link }) => {
   const [count, setCount] = useState(link.clickCount);
   const [tagOpen, setTagOpen] = useState(false);
   const [tags, setTags] = useState(link.tags);
+  const [modalOpen, setModalOpen] = useState(false);
 
   const handleCount = async () => {
     const result = await incrementClickCount(link.id);
@@ -74,13 +76,20 @@ const LinkCard = ({ link }) => {
       </CardContent>
 
       <CardActions>
-        <Button variant="outlined" color="secondary" size="small">
+        <Button
+          variant="outlined"
+          color="secondary"
+          size="small"
+          onClick={() => setModalOpen(true)}
+        >
           Edit
         </Button>
         <Button variant="outlined" color="secondary" size="small">
           Delete
         </Button>
       </CardActions>
+
+      <ModalForm {...{ modalOpen, setModalOpen, link }} />
     </Card>
   );
 };

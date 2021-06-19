@@ -55,6 +55,16 @@ async function updateLink(linkId, fields = {}) {
       Object.values(fields)
     );
 
+    await client.query(
+      /*sql*/ `
+        UPDATE links
+        SET "clickCount"=0
+        WHERE id=${linkId}
+        RETURNING *;
+      `,
+      Object.values(fields)
+    );
+
     return await getLinkById(linkId);
   } catch (error) {
     console.log("Error in updateLink");
