@@ -1,1 +1,1 @@
-export { getAllLinks, incrementClickCount } from "./links";
+export { getAllLinks, incrementClickCount, createNewLink } from "./links";

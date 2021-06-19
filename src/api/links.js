@@ -11,6 +11,23 @@ export async function getAllLinks() {
   }
 }
 
+export async function createNewLink(url) {
+  try {
+    const response = await fetch(`${URL}/links`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ url }),
+    });
+    const result = await response.json();
+
+    return result;
+  } catch (error) {
+    throw error;
+  }
+}
+
 export async function incrementClickCount(linkId) {
   try {
     const response = await fetch(`${URL}/links/${linkId}/count`, {

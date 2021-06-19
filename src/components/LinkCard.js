@@ -21,23 +21,29 @@ const LinkCard = ({ link }) => {
   };
 
   return (
-    <Card>
+    <Card elevation={2}>
       <CardContent key={link.id}>
-        <Typography variant="h3">
+        <Typography variant="h4">
           <a
             href={link.url}
             target="_blank"
             onClick={handleCount}
             rel="noopener noreferrer"
+            style={{ textDecoration: "none" }}
           >
             {link.url}
           </a>
         </Typography>
-        <Typography variant="subtitle1">
-          Date Shared: {link.sharedDate}
+        <Typography variant="subtitle1" color="textSecondary" gutterBottom>
+          {count} clicks since {link.sharedDate}
         </Typography>
-        <p>Click Count: {count}</p>
-        <p>Comment: {link.comment}</p>
+        <Typography component="div">
+          Tags:
+          {link.tags.map((tag) => (
+            <Button>{tag}</Button>
+          ))}
+        </Typography>
+        <Typography component="div">Comment: {link.comment}</Typography>
         {/* <div>
           Comments:
           {link.comments.map((com) => (
@@ -46,7 +52,12 @@ const LinkCard = ({ link }) => {
         </div> */}
       </CardContent>
       <CardActions>
-        <Button>Delete</Button>
+        <Button variant="outlined" color="secondary" size="small">
+          Edit
+        </Button>
+        <Button variant="outlined" color="secondary" size="small">
+          Delete
+        </Button>
       </CardActions>
     </Card>
   );
