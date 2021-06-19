@@ -10,17 +10,25 @@ import {
 } from "@material-ui/core";
 import AddIcon from "@material-ui/icons/Add";
 
-import { incrementClickCount, createNewTag } from "../api";
+import { AddTagComment } from "./index";
+
+import { incrementClickCount } from "../api";
 
 const LinkCard = ({ link }) => {
   // console.log(link);
 
   const [count, setCount] = useState(link.clickCount);
+  const [tagOpen, setTagOpen] = useState(false);
+  const [tags, setTags] = useState(link.tags);
 
   const handleCount = async () => {
     const result = await incrementClickCount(link.id);
 
     setCount(result.clickCount);
+  };
+
+  const handleTagOpen = () => {
+    setTagOpen(!tagOpen);
   };
 
   return (
@@ -42,13 +50,20 @@ const LinkCard = ({ link }) => {
 
         <Typography component="div">
           Tags:
-          {link.tags.map((tag) => (
-            <Button>{tag}</Button>
+          {tags.map((tag) => (
+            <Button key={tag.id}>{tag.tag}</Button>
           ))}
-          <IconButton>
+          <IconButton onClick={handleTagOpen}>
             <AddIcon color="secondary" fontSize="small" />
           </IconButton>
         </Typography>
+        {tagOpen && (
+          <AddTagComment
+            setTags={setTags}
+            linkId={link.id}
+            setTagOpen={setTagOpen}
+          />
+        )}
 
         <Typography component="div">
           Comment: {link.comment}

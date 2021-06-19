@@ -6,7 +6,6 @@ import { getAllLinks } from "../api";
 import { NavBar, LinkCard, AddURL } from "./index";
 
 const App = () => {
-  // const [message, setMessage] = useState("");
   const [links, setLinks] = useState(false);
 
   useEffect(() => {
@@ -15,7 +14,6 @@ const App = () => {
         setLinks(response);
       })
       .catch((error) => {
-        // setMessage(error.message);
         console.error(error);
       });
   }, []);
@@ -36,7 +34,6 @@ const App = () => {
             })}
         </Grid>
       </Container>
-      {/* <h2>{message}</h2> */}
     </div>
   );
 };
