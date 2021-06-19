@@ -74,5 +74,5 @@ module.exports = {
   getAllTags,
   createTag,
   createLinkTag,
-  getTagsByLinkId
+  getTagsByLinkId,
 };
