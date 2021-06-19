@@ -22,12 +22,12 @@ tagsRouter.get("/:linkId", async (req, res) => {
 });
 
 //get links by tag
-tagsRouter.get("/:tag/links", async (req, res) => {
-  const { tag } = req.params;
-  const links = await getLinksByTag(tag);
+// tagsRouter.get("/:tag/links", async (req, res) => {
+//   const { tag } = req.params;
+//   const links = await getLinksByTag(tag);
 
-  res.send(links);
-});
+//   res.send(links);
+// });
 
 //post
 tagsRouter.post("/:linkId", async (req, res) => {
@@ -39,8 +39,6 @@ tagsRouter.post("/:linkId", async (req, res) => {
 });
 
 //delete
-tagsRouter.delete("/:linkId", async (req, res) => {
-  
-});
+tagsRouter.delete("/:linkId", async (req, res) => {});
 
 module.exports = tagsRouter;

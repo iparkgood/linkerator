@@ -24,7 +24,8 @@ async function buildTables() {
         id SERIAL PRIMARY KEY,
         url varchar(255) UNIQUE NOT NULL,
         "clickCount" INTEGER DEFAULT 0,
-        "sharedDate" TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP
+        "sharedDate" TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
+        comment TEXT
       );
       CREATE TABLE tags(
         id SERIAL PRIMARY KEY,
@@ -35,12 +36,6 @@ async function buildTables() {
         "tagId" INTEGER REFERENCES tags(id),
         UNIQUE ("linkId", "tagId")
       );
-      CREATE TABLE comments(
-        id SERIAL PRIMARY KEY,
-        comment TEXT,
-        "createdDate" TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
-        "linkId" INTEGER REFERENCES links(id)
-      );
     `);
   } catch (error) {
     console.log("error creating tables");
@@ -48,10 +43,19 @@ async function buildTables() {
   }
 }
 
+/*
+      CREATE TABLE comments(
+        id SERIAL PRIMARY KEY,
+        comment TEXT,
+        "createdDate" TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
+        "linkId" INTEGER REFERENCES links(id)
+      );
+*/
+
 async function populateInitialData() {
   try {
     await createInitialLinks();
-    await createInitialComments();
+    // await createInitialComments();
   } catch (error) {
     throw error;
   }
