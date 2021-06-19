@@ -18,15 +18,35 @@ const useStyles = makeStyles((theme) => ({
   },
 }))
 
-const NavBar = () => {
+const NavBar = ({ setLinks }) => {
   const classes = useStyles()
+
+  const handleSearch = (e) => {
+    const searchTerm = e.target.value.trim()
+    if (searchTerm === '') {
+      setLinks((links) => links.map(link => ({...link, isHidden: false})))
+    } else {
+      setLinks((links) => {
+        return links.map(link => {
+          //substring(8) is to remove the https://
+          const domain = link.url.substring(8)
+          return (domain.startsWith(searchTerm)) ? {...link, isHidden: false} : {...link, isHidden: true}
+        })
+      })
+    }
+      
+
+  }
 
   return (
     <AppBar position="sticky">
       <Toolbar className={classes.flex}>
         <h1>The Great Linkerator</h1>
         <div className={classes.searchBar}>
-          <InputBase className={classes.searchInput} placeholder="Search..." />
+          <InputBase onChange={handleSearch} className={classes.searchInput} placeholder="Search URL ..." />
+        </div>
+        <div className={classes.searchBar}>
+          <InputBase className={classes.searchInput} placeholder="Search Tags ..." />
         </div>
       </Toolbar>
     </AppBar>
