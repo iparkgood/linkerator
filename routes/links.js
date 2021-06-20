@@ -5,6 +5,7 @@ const {
   createLink,
   updateClickCount,
   updateLink,
+  deleteLink
 } = require("../db");
 
 linksRouter.get("/", async (req, res, next) => {
@@ -45,13 +46,13 @@ linksRouter.patch("/:linkId", async (req, res) => {
 });
 
 //delete
-// linksRouter.delete("/:linkId", async (req, res) => {
-//   const { linkId } = req.params;
+linksRouter.delete("/:linkId", async (req, res) => {
+  const { linkId } = req.params;
 
-//   const deletedLink = await updateLink(linkId, { active: false });
+  const deletedLink = await deleteLink(linkId);
 
-//   res.send(deletedLink);
-// });
+  res.send(deletedLink);
+});
 
 //update count
 linksRouter.patch("/:linkId/count", async (req, res) => {

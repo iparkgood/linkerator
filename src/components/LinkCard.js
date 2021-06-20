@@ -14,7 +14,7 @@ import AddIcon from "@material-ui/icons/Add";
 
 import { AddTagComment, ModalForm } from "./index";
 
-import { incrementClickCount, createComment } from "../api";
+import { incrementClickCount, createComment, destroyLink } from "../api";
 
 const LinkCard = ({ link, setLinks }) => {
   console.log(link.comment);
@@ -57,6 +57,16 @@ const LinkCard = ({ link, setLinks }) => {
 
   const handleTagOpen = () => {
     setTagOpen(!tagOpen);
+  };
+
+  const handleDelete = async () => {
+    const result = await destroyLink(link.id);
+
+    console.log("deleted!", result);
+
+    setLinks((currentLinks) => {
+      return currentLinks.filter((cl) => result.id !== cl.id);
+    });
   };
 
   return (
@@ -126,7 +136,12 @@ const LinkCard = ({ link, setLinks }) => {
         >
           Edit
         </Button>
-        <Button variant="outlined" color="secondary" size="small">
+        <Button
+          variant="outlined"
+          color="secondary"
+          size="small"
+          onClick={handleDelete}
+        >
           Delete
         </Button>
       </CardActions>

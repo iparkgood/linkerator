@@ -32,7 +32,7 @@ const App = () => {
           {(links) && links.map(link => {
             return (link.isHidden) ? "" :
               (
-                <Grid item xs={6}>
+                <Grid item xs={12} md={6} key={link.id}>
                   <LinkCard link={link} setLinks={setLinks} />
                 </Grid>
               )

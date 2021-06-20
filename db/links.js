@@ -127,6 +127,19 @@ async function updateClickCount(linkId) {
   return result;
 }
 
+async function deleteLink(linkId) {
+  const { rows } = await client.query(
+    /*sql*/ `
+    DELETE FROM links WHERE id=$1 RETURNING *;
+  `,
+    [linkId]
+  );
+
+  const result = rows[0];
+
+  return result;
+}
+
 module.exports = {
   getAllLinks,
   createLink,
@@ -135,4 +148,5 @@ module.exports = {
   getLinksByTag,
   updateLink,
   updateClickCount,
+  deleteLink
 };
