@@ -5,7 +5,7 @@ import SendIcon from "@material-ui/icons/Send";
 
 import { createNewTag } from "../api";
 
-const AddTagComment = ({ setTags, linkId, setTagOpen }) => {
+const AddTag = ({ setTags, linkId, setTagOpen }) => {
   const [newTag, setNewTag] = useState("");
 
   const handleSubmit = (e) => {
@@ -34,4 +34,4 @@ const AddTagComment = ({ setTags, linkId, setTagOpen }) => {
   );
 };
 
-export default AddTagComment;
+export default AddTag;

@@ -11,18 +11,20 @@ import {
   TextField,
 } from "@material-ui/core";
 import AddIcon from "@material-ui/icons/Add";
+import SendIcon from "@material-ui/icons/Send";
 
-import { AddTagComment, ModalForm } from "./index";
+import { AddTag, ModalForm } from "./index";
 
 import { incrementClickCount, createComment, destroyLink } from "../api";
 
 const LinkCard = ({ link, setLinks }) => {
-  console.log(link.comment);
+  // console.log(link.comment);
 
   const [count, setCount] = useState(link.clickCount);
   const [tagOpen, setTagOpen] = useState(false);
   const [tags, setTags] = useState(link.tags);
   const [modalOpen, setModalOpen] = useState(false);
+
   const [addCommentBool, setAddCommentBool] = useState(false);
   const [comment, setComment] = useState("");
 
@@ -35,6 +37,7 @@ const LinkCard = ({ link, setLinks }) => {
   const submitComment = async (e) => {
     try {
       await createComment(link.id, comment);
+
       setLinks((links) => {
         return links.map((el) => {
           return el.id === link.id
@@ -43,7 +46,7 @@ const LinkCard = ({ link, setLinks }) => {
         });
       });
       setComment("");
-      setAddCommentBool(false);
+      setAddCommentBool();
     } catch (error) {
       console.error(error);
     }
@@ -61,8 +64,6 @@ const LinkCard = ({ link, setLinks }) => {
 
   const handleDelete = async () => {
     const result = await destroyLink(link.id);
-
-    console.log("deleted!", result);
 
     setLinks((currentLinks) => {
       return currentLinks.filter((cl) => result.id !== cl.id);
@@ -96,11 +97,7 @@ const LinkCard = ({ link, setLinks }) => {
           </IconButton>
         </Typography>
         {tagOpen && (
-          <AddTagComment
-            setTags={setTags}
-            linkId={link.id}
-            setTagOpen={setTagOpen}
-          />
+          <AddTag setTags={setTags} linkId={link.id} setTagOpen={setTagOpen} />
         )}
 
         <Typography component="div">
@@ -113,16 +110,18 @@ const LinkCard = ({ link, setLinks }) => {
           <>
             <TextField
               onChange={handleCommentChange}
-              placeholder="Add comment here ..."
+              placeholder="Add Comment"
             />
             <Button onClick={closeCommentField}>X</Button>
-            <Button onClick={submitComment}>SEND</Button>
+            <Button color="secondary" onClick={submitComment}>
+              <SendIcon />
+            </Button>
           </>
         )}
-        <ul>
+        <ul style={{listStylePosition:"inside"}}>
           {link.comments.length > 0 &&
             link.comments.map((com) => {
-              return <li>{com.comment}</li>;
+              return <li key={com.id}>{com.comment}</li>;
             })}
         </ul>
       </CardContent>

@@ -26,8 +26,8 @@ const ModalForm = ({ modalOpen, setModalOpen, link }) => {
 
     console.log(result);
 
-    link.url = result.url;
-    link.clickCount = result.clickCount;
+    
+
   };
 
   const handleSubmit = (e) => {
