@@ -39,12 +39,8 @@ const LinkCard = ({ link, setLinks }) => {
   const [addCommentBool, setAddCommentBool] = useState(false);
   const [comment, setComment] = useState("");
 
-  const openCommentField = () => setAddCommentBool(true);
+  const openCommentField = () => setAddCommentBool(!addCommentBool);
 
-  const closeCommentField = () => {
-    setComment("");
-    setAddCommentBool(false);
-  };
 
   const handleCommentChange = (e) => setComment(e.target.value);
 
@@ -84,6 +80,25 @@ const LinkCard = ({ link, setLinks }) => {
     });
   };
 
+  const filterByTag = (e) => {
+    e.persist()
+    const tagName = e.target.textContent.toLowerCase()
+    setLinks((links) => {
+      return links.map(link => {
+        const { tags } = link
+        let tagBool = false
+        for (let i = 0; i < tags.length; i++) {
+          const tagLowerCase = tags[i].tag.toLowerCase()
+          if (tagLowerCase.startsWith(tagName)) {
+            tagBool = true
+            break
+          }
+        }
+        return (tagBool) ? { ...link, isHidden: false } : { ...link, isHidden: true }
+      })
+    })
+  }
+
   return (
     <Card elevation={2}>
       <CardContent key={link.id}>
@@ -104,7 +119,7 @@ const LinkCard = ({ link, setLinks }) => {
         <Typography component="div">
           Tags:
           {tags.map((tag) => (
-            <Button variant="contained" key={tag.id} className={classes.tagButton}>
+            <Button onClick={filterByTag} variant="contained" key={tag.id} className={classes.tagButton}>
               {tag.tag}
             </Button>
           ))}
@@ -128,7 +143,6 @@ const LinkCard = ({ link, setLinks }) => {
               onChange={handleCommentChange}
               placeholder="Add Comment"
             />
-            <Button onClick={closeCommentField}>X</Button>
             <IconButton color="secondary" onClick={submitComment}>
               <SendIcon />
             </IconButton>
