@@ -79,8 +79,8 @@ const NavBar = ({ setLinks }) => {
         <div className={classes.searchBar}>
           <InputBase onChange={handleTagSearch} className={classes.searchInput} placeholder="Search Tags ..." />
         </div>
-        <Button onClick={sortByClicks}>Sort by Clicks</Button>
-        <Button onClick={clearFilters}>Clear Filters</Button>
+        <Button style={{"color": "inherit"}} onClick={sortByClicks}>Sort by Clicks</Button>
+        <Button style={{"color": "inherit"}} onClick={clearFilters}>Clear Filters</Button>
       </Toolbar>
     </AppBar>
   )
