@@ -34,6 +34,20 @@ const NavBar = ({ setLinks }) => {
         })
       })
     }
+
+  // const handleTagSearch = (e) => {
+  //   const searchTerm = e.target.value.trim()
+  //   if (searchTerm === '') {
+  //     setLinks((links) => links.map(link => ({...link, isHidden: false})))
+  //   } else {
+  //     setLinks((links) => {
+  //       return links.map(link => {
+  //         const tag = link.tag
+  //         return (domain.startsWith(searchTerm)) ? {...link, isHidden: false} : {...link, isHidden: true}
+  //       })
+  //     })
+  //   }
+  // }
       
 
   }
