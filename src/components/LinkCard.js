@@ -39,12 +39,8 @@ const LinkCard = ({ link, setLinks }) => {
   const [addCommentBool, setAddCommentBool] = useState(false);
   const [comment, setComment] = useState("");
 
-  const openCommentField = () => setAddCommentBool(true);
+  const openCommentField = () => setAddCommentBool(!addCommentBool);
 
-  const closeCommentField = () => {
-    setComment("");
-    setAddCommentBool(false);
-  };
 
   const handleCommentChange = (e) => setComment(e.target.value);
 
@@ -147,7 +143,6 @@ const LinkCard = ({ link, setLinks }) => {
               onChange={handleCommentChange}
               placeholder="Add Comment"
             />
-            <Button onClick={closeCommentField}>X</Button>
             <IconButton color="secondary" onClick={submitComment}>
               <SendIcon />
             </IconButton>
