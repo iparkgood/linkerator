@@ -48,17 +48,7 @@ async function updateLink(linkId, fields = {}) {
     await client.query(
       /*sql*/ `
         UPDATE links
-        SET ${setString}, "sharedDate"=CURRENT_TIMESTAMP
-        WHERE id=${linkId}
-        RETURNING *;
-      `,
-      Object.values(fields)
-    );
-
-    await client.query(
-      /*sql*/ `
-        UPDATE links
-        SET "clickCount"=0
+        SET ${setString}, "sharedDate"=CURRENT_TIMESTAMP, "clickCount"=0
         WHERE id=${linkId}
         RETURNING *;
       `,

@@ -32,11 +32,11 @@ linksRouter.post("/", async (req, res) => {
 //patch
 linksRouter.patch("/:linkId", async (req, res) => {
   const { linkId } = req.params;
-  // const { url } = req.body;
+  const { url } = req.body;
 
   try {
-    // const updatedLink = await updateLink(linkId, { url: url });
-    const updatedLink = await updateLink(linkId, req.body);
+    const updatedLink = await updateLink(linkId, { url: url });
+    // const updatedLink = await updateLink(linkId, req.body);
 
     res.send(updatedLink);
   } catch (error) {

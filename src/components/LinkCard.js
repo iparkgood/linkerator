@@ -14,7 +14,6 @@ import AddIcon from "@material-ui/icons/Add";
 
 import { AddTagComment, ModalForm } from "./index";
 
-import { incrementClickCount } from "../api";
 import { incrementClickCount, createComment } from "../api";
 
 const LinkCard = ({ link, setLinks }) => {

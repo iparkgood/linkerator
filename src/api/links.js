@@ -28,14 +28,14 @@ export async function createNewLink(url) {
   }
 }
 
-export async function patchLink(linkId, url, comment = "") {
+export async function patchLink(linkId, url) {
   try {
     const response = await fetch(`${URL}/links/${linkId}`, {
       method: "PATCH",
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({ url, comment }),
+      body: JSON.stringify({ url }),
     });
     const result = await response.json();
 

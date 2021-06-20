@@ -1,7 +1,6 @@
 // code to build and initialize DB goes here
 const client = require("./client");
 const { createInitialLinks } = require("./createInitialLinks");
-const { createInitialComments } = require("./createInitialComments");
 
 async function buildTables() {
   try {
@@ -36,6 +35,11 @@ async function buildTables() {
         "tagId" INTEGER REFERENCES tags(id),
         UNIQUE ("linkId", "tagId")
       );
+      CREATE TABLE comments(
+        id SERIAL PRIMARY KEY,
+        "createdDate" TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
+        "linkId" INTEGER REFERENCES links(id)
+      );
     `);
   } catch (error) {
     console.log("error creating tables");
@@ -43,19 +47,10 @@ async function buildTables() {
   }
 }
 
-/*
-      CREATE TABLE comments(
-        id SERIAL PRIMARY KEY,
-        comment TEXT,
-        "createdDate" TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
-        "linkId" INTEGER REFERENCES links(id)
-      );
-*/
-
 async function populateInitialData() {
   try {
     await createInitialLinks();
-    // await createInitialComments();
+  
   } catch (error) {
     throw error;
   }

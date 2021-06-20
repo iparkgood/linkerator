@@ -18,17 +18,15 @@ const ModalForm = ({ modalOpen, setModalOpen, link }) => {
   const classes = useStyles();
 
   const [updateURL, setURL] = useState(link.url);
-  const [updateComment, setComment] = useState(link.comment);
 
   const handleUpdate = async () => {
-    const result = await patchLink(link.id, updateURL, updateComment);
+    const result = await patchLink(link.id, updateURL);
 
     setModalOpen(false);
 
     console.log(result);
 
     link.url = result.url;
-    link.comment = result.comment;
     link.clickCount = result.clickCount;
   };
 
@@ -67,13 +65,6 @@ const ModalForm = ({ modalOpen, setModalOpen, link }) => {
           value={updateURL}
           onChange={(e) => setURL(e.target.value)}
           fullWidth
-        />
-        <TextField
-          label="Enter Comment"
-          value={updateComment}
-          onChange={(e) => setComment(e.target.value)}
-          fullWidth
-          style={{ marginTop: "8px" }}
         />
 
         <ButtonGroup
