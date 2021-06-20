@@ -22,34 +22,40 @@ const NavBar = ({ setLinks }) => {
   const classes = useStyles()
 
   const handleSearch = (e) => {
-    const searchTerm = e.target.value.trim()
+    const searchTerm = e.target.value.trim().toLowerCase()
     if (searchTerm === '') {
-      setLinks((links) => links.map(link => ({...link, isHidden: false})))
+      setLinks((links) => links.map(link => ({ ...link, isHidden: false })))
     } else {
       setLinks((links) => {
         return links.map(link => {
           //substring(8) is to remove the https://
-          const domain = link.url.substring(8)
-          return (domain.startsWith(searchTerm)) ? {...link, isHidden: false} : {...link, isHidden: true}
+          const domain = link.url.substring(8).toLowerCase()
+          return (domain.startsWith(searchTerm)) ? { ...link, isHidden: false } : { ...link, isHidden: true }
         })
       })
     }
+  }
 
-  // const handleTagSearch = (e) => {
-  //   const searchTerm = e.target.value.trim()
-  //   if (searchTerm === '') {
-  //     setLinks((links) => links.map(link => ({...link, isHidden: false})))
-  //   } else {
-  //     setLinks((links) => {
-  //       return links.map(link => {
-  //         const tag = link.tag
-  //         return (domain.startsWith(searchTerm)) ? {...link, isHidden: false} : {...link, isHidden: true}
-  //       })
-  //     })
-  //   }
-  // }
-      
-
+  const handleTagSearch = (e) => {
+    const searchTerm = e.target.value.trim().toLowerCase()
+    if (searchTerm === '') {
+      setLinks((links) => links.map(link => ({ ...link, isHidden: false })))
+    } else {
+      setLinks((links) => {
+        return links.map(link => {
+          const { tags } = link
+          let tagBool = false
+          for (let i = 0; i < tags.length; i++) {
+            const tagLowerCase = tags[i].tag.toLowerCase()
+            if (tagLowerCase.startsWith(searchTerm)) {
+              tagBool = true
+              break
+            }
+          }
+          return (tagBool) ? { ...link, isHidden: false } : { ...link, isHidden: true }
+        })
+      })
+    }
   }
 
   return (
@@ -60,7 +66,7 @@ const NavBar = ({ setLinks }) => {
           <InputBase onChange={handleSearch} className={classes.searchInput} placeholder="Search URL ..." />
         </div>
         <div className={classes.searchBar}>
-          <InputBase className={classes.searchInput} placeholder="Search Tags ..." />
+          <InputBase onChange={handleTagSearch} className={classes.searchInput} placeholder="Search Tags ..." />
         </div>
       </Toolbar>
     </AppBar>
