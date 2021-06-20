@@ -129,9 +129,9 @@ const LinkCard = ({ link, setLinks }) => {
               placeholder="Add Comment"
             />
             <Button onClick={closeCommentField}>X</Button>
-            <Button color="secondary" onClick={submitComment}>
+            <IconButton color="secondary" onClick={submitComment}>
               <SendIcon />
-            </Button>
+            </IconButton>
           </>
         )}
         <ul style={{ listStylePosition: "inside" }}>
@@ -161,7 +161,7 @@ const LinkCard = ({ link, setLinks }) => {
         </Button>
       </CardActions>
 
-      <ModalForm {...{ modalOpen, setModalOpen, link }} />
+      <ModalForm {...{ modalOpen, setModalOpen, link, setLinks, setCount }} />
     </Card>
   );
 };
