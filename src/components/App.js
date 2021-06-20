@@ -8,7 +8,6 @@ const addingTheHiddenField = (links) => links.map(link => ({ ...link, isHidden: 
 
 
 const App = () => {
-  // const [message, setMessage] = useState("");
   const [links, setLinks] = useState(false);
 
   useEffect(() => {
@@ -20,7 +19,6 @@ const App = () => {
         setLinks(newObject);
       })
       .catch((error) => {
-        // setMessage(error.message);
         console.error(error);
       });
   }, []);
@@ -33,15 +31,17 @@ const App = () => {
         <Grid style={{ marginTop: "8px" }} container spacing={3}>
           {(links) && links.map(link => {
             return (link.isHidden) ? "" :
-              (
-                <Grid item xs={6}>
+              ( //xs={12} md={6} when the screen size is x-small
+                //each grid item will take all the 12 columns of Grid container which will be shown as one column
+                //when the screen size is over medium
+                //each grid item will take 6 columns which will be shown as two columns
+                <Grid item xs={12} md={6} key={link.id}>
                   <LinkCard link={link} setLinks={setLinks} />
                 </Grid>
               )
           })}
         </Grid>
       </Container>
-      {/* <h2>{message}</h2> */}
     </div>
   );
 };

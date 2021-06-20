@@ -3,8 +3,9 @@ const linksRouter = require("express").Router();
 const {
   getAllLinks,
   createLink,
-  updateLink,
   updateClickCount,
+  updateLink,
+  deleteLink
 } = require("../db");
 
 linksRouter.get("/", async (req, res, next) => {
@@ -32,11 +33,11 @@ linksRouter.post("/", async (req, res) => {
 //patch
 linksRouter.patch("/:linkId", async (req, res) => {
   const { linkId } = req.params;
-  // const { url } = req.body;
+  const { url } = req.body;
 
   try {
-    // const updatedLink = await updateLink(linkId, { url: url });
-    const updatedLink = await updateLink(linkId, req.body);
+    const updatedLink = await updateLink(linkId, { url: url });
+    // const updatedLink = await updateLink(linkId, req.body);
 
     res.send(updatedLink);
   } catch (error) {
@@ -48,7 +49,7 @@ linksRouter.patch("/:linkId", async (req, res) => {
 linksRouter.delete("/:linkId", async (req, res) => {
   const { linkId } = req.params;
 
-  const deletedLink = await updateLink(linkId, { active: false });
+  const deletedLink = await deleteLink(linkId);
 
   res.send(deletedLink);
 });
