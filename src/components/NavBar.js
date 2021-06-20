@@ -60,10 +60,13 @@ const NavBar = ({ setLinks }) => {
 
   const sortByClicks = (e) => {
     setLinks((links) => {
-      const sortedLinksArray = links.sort((a, b) => b.clickCount - a.clickCount)
-      console.log("sorted Clicked", sortedLinksArray)
+      const sortedLinksArray = [...links].sort((a, b) => b.clickCount - a.clickCount)
       return sortedLinksArray
     })
+  }
+
+  const clearFilters = (e) => {
+    setLinks((links) => links.map(link => ({ ...link, isHidden: false })))
   }
 
   return (
@@ -77,6 +80,7 @@ const NavBar = ({ setLinks }) => {
           <InputBase onChange={handleTagSearch} className={classes.searchInput} placeholder="Search Tags ..." />
         </div>
         <Button onClick={sortByClicks}>Sort by Clicks</Button>
+        <Button onClick={clearFilters}>Clear Filters</Button>
       </Toolbar>
     </AppBar>
   )
