@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+
 import {
   Card,
   CardActions,
@@ -7,45 +8,80 @@ import {
   Typography,
   IconButton,
   Link,
-  TextField
+  TextField,
+  makeStyles,
 } from "@material-ui/core";
 import AddIcon from "@material-ui/icons/Add";
+import SendIcon from "@material-ui/icons/Send";
 
-import { incrementClickCount, createNewTag, createComment } from "../api";
-import { LinkSharp } from "@material-ui/icons";
+import { AddTag, ModalForm } from "./index";
+
+import { incrementClickCount, createComment, destroyLink } from "../api";
+
+const useStyles = makeStyles({
+  tagButton: {
+    marginLeft: "6px",
+    marginRight: "6px",
+    padding: 0,
+    borderRadius: "12px",
+  },
+});
 
 const LinkCard = ({ link, setLinks }) => {
-  console.log(link.comment);
+  // console.log(link.comment);
+  const classes = useStyles();
 
   const [count, setCount] = useState(link.clickCount);
-  const [addCommentBool, setAddCommentBool] = useState(false)
-  const [comment, setComment] = useState('')
+  const [tagOpen, setTagOpen] = useState(false);
+  const [tags, setTags] = useState(link.tags);
+  const [modalOpen, setModalOpen] = useState(false);
 
-  const openCommentField = () => setAddCommentBool(true)
+  const [addCommentBool, setAddCommentBool] = useState(false);
+  const [comment, setComment] = useState("");
+
+  const openCommentField = () => setAddCommentBool(true);
+
   const closeCommentField = () => {
-    setComment('')
-    setAddCommentBool(false)
-  }
-  const handleCommentChange = (e) => setComment(e.target.value)
+    setComment("");
+    setAddCommentBool(false);
+  };
+
+  const handleCommentChange = (e) => setComment(e.target.value);
+
   const submitComment = async (e) => {
     try {
-      await createComment(link.id, comment)
+      await createComment(link.id, comment);
+
       setLinks((links) => {
-        return links.map(el => {
-          return (el.id === link.id) ? ({...el, comments: [...el.comments, {comment: comment}]}) : el
-        })
-      })
-      setComment('')
-      setAddCommentBool(false)
+        return links.map((el) => {
+          return el.id === link.id
+            ? { ...el, comments: [...el.comments, { comment: comment }] }
+            : el;
+        });
+      });
+      setComment("");
+      setAddCommentBool();
     } catch (error) {
-      console.error(error)
+      console.error(error);
     }
-  }
+  };
 
   const handleCount = async () => {
     const result = await incrementClickCount(link.id);
 
     setCount(result.clickCount);
+  };
+
+  const handleTagOpen = () => {
+    setTagOpen(!tagOpen);
+  };
+
+  const handleDelete = async () => {
+    const result = await destroyLink(link.id);
+
+    setLinks((currentLinks) => {
+      return currentLinks.filter((cl) => result.id !== cl.id);
+    });
   };
 
   return (
@@ -67,44 +103,65 @@ const LinkCard = ({ link, setLinks }) => {
 
         <Typography component="div">
           Tags:
-          {link.tags.map((tag) => (
-            <Button>{tag}</Button>
+          {tags.map((tag) => (
+            <Button variant="contained" key={tag.id} className={classes.tagButton}>
+              {tag.tag}
+            </Button>
           ))}
-          <IconButton>
+          <IconButton onClick={handleTagOpen}>
             <AddIcon color="secondary" fontSize="small" />
           </IconButton>
         </Typography>
+        {tagOpen && (
+          <AddTag setTags={setTags} linkId={link.id} setTagOpen={setTagOpen} />
+        )}
 
         <Typography component="div">
-          Comment: 
+          Comment:
           <IconButton onClick={openCommentField}>
             <AddIcon color="secondary" fontSize="small" />
           </IconButton>
         </Typography>
-        {(addCommentBool) && 
+        {addCommentBool && (
           <>
-            <TextField onChange={handleCommentChange} placeholder="Add comment here ..." />
+            <TextField
+              onChange={handleCommentChange}
+              placeholder="Add Comment"
+            />
             <Button onClick={closeCommentField}>X</Button>
-            <Button onClick={submitComment}>SEND</Button>
+            <IconButton color="secondary" onClick={submitComment}>
+              <SendIcon />
+            </IconButton>
           </>
-        }
-        <ul>
-            {(link.comments.length > 0) && link.comments.map(com => {
-              return (
-                <li>{com.comment}</li>
-              )
+        )}
+        <ul style={{ listStylePosition: "inside" }}>
+          {link.comments.length > 0 &&
+            link.comments.map((com) => {
+              return <li key={com.id}>{com.comment}</li>;
             })}
-          </ul>
+        </ul>
       </CardContent>
 
       <CardActions>
-        <Button variant="outlined" color="secondary" size="small">
+        <Button
+          variant="outlined"
+          color="secondary"
+          size="small"
+          onClick={() => setModalOpen(true)}
+        >
           Edit
         </Button>
-        <Button variant="outlined" color="secondary" size="small">
+        <Button
+          variant="outlined"
+          color="secondary"
+          size="small"
+          onClick={handleDelete}
+        >
           Delete
         </Button>
       </CardActions>
+
+      <ModalForm {...{ modalOpen, setModalOpen, link, setLinks, setCount }} />
     </Card>
   );
 };

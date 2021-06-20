@@ -7,19 +7,19 @@ const {
 } = require("../db");
 
 //get all tags
-tagsRouter.get("/", async (req, res) => {
-  const allTags = await getAllTags();
+// tagsRouter.get("/", async (req, res) => {
+//   const allTags = await getAllTags();
 
-  res.send(allTags);
-});
+//   res.send(allTags);
+// });
 
 //get tags by LinkId
-tagsRouter.get("/:linkId", async (req, res) => {
-  const { linkId } = req.params;
-  const allTags = await getTagsByLinkId(linkId);
+// tagsRouter.get("/:linkId", async (req, res) => {
+//   const { linkId } = req.params;
+//   const allTags = await getTagsByLinkId(linkId);
 
-  res.send(allTags);
-});
+//   res.send(allTags);
+// });
 
 //get links by tag
 // tagsRouter.get("/:tag/links", async (req, res) => {

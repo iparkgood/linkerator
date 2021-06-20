@@ -15,7 +15,10 @@ async function getAllTags() {
 
 async function createTag(linkId, tag) {
   try {
-    await client.query(/*sql*/ `
+    const {
+      rows: [newTag],
+    } = await client.query(
+      /*sql*/ `
       INSERT INTO tags(tag)
       VALUES ($1) 
       ON CONFLICT (tag) DO NOTHING
@@ -23,8 +26,6 @@ async function createTag(linkId, tag) {
     `,
       [tag]
     ); //create a new tag in tags table
-
-    const newTag = rows[0];
 
     await createLinkTag(linkId, newTag.id);
     //create a new row in link_tags table
