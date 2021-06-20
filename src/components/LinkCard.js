@@ -9,6 +9,7 @@ import {
   IconButton,
   Link,
   TextField,
+  makeStyles,
 } from "@material-ui/core";
 import AddIcon from "@material-ui/icons/Add";
 import SendIcon from "@material-ui/icons/Send";
@@ -17,8 +18,18 @@ import { AddTag, ModalForm } from "./index";
 
 import { incrementClickCount, createComment, destroyLink } from "../api";
 
+const useStyles = makeStyles({
+  tagButton: {
+    marginLeft: "6px",
+    marginRight: "6px",
+    padding: 0,
+    borderRadius: "12px",
+  },
+});
+
 const LinkCard = ({ link, setLinks }) => {
   // console.log(link.comment);
+  const classes = useStyles();
 
   const [count, setCount] = useState(link.clickCount);
   const [tagOpen, setTagOpen] = useState(false);
@@ -29,11 +40,14 @@ const LinkCard = ({ link, setLinks }) => {
   const [comment, setComment] = useState("");
 
   const openCommentField = () => setAddCommentBool(true);
+
   const closeCommentField = () => {
     setComment("");
     setAddCommentBool(false);
   };
+
   const handleCommentChange = (e) => setComment(e.target.value);
+
   const submitComment = async (e) => {
     try {
       await createComment(link.id, comment);
@@ -90,7 +104,9 @@ const LinkCard = ({ link, setLinks }) => {
         <Typography component="div">
           Tags:
           {tags.map((tag) => (
-            <Button key={tag.id}>{tag.tag}</Button>
+            <Button variant="contained" key={tag.id} className={classes.tagButton}>
+              {tag.tag}
+            </Button>
           ))}
           <IconButton onClick={handleTagOpen}>
             <AddIcon color="secondary" fontSize="small" />
@@ -113,12 +129,12 @@ const LinkCard = ({ link, setLinks }) => {
               placeholder="Add Comment"
             />
             <Button onClick={closeCommentField}>X</Button>
-            <Button color="secondary" onClick={submitComment}>
+            <IconButton color="secondary" onClick={submitComment}>
               <SendIcon />
-            </Button>
+            </IconButton>
           </>
         )}
-        <ul style={{listStylePosition:"inside"}}>
+        <ul style={{ listStylePosition: "inside" }}>
           {link.comments.length > 0 &&
             link.comments.map((com) => {
               return <li key={com.id}>{com.comment}</li>;
@@ -145,7 +161,7 @@ const LinkCard = ({ link, setLinks }) => {
         </Button>
       </CardActions>
 
-      <ModalForm {...{ modalOpen, setModalOpen, link }} />
+      <ModalForm {...{ modalOpen, setModalOpen, link, setLinks, setCount }} />
     </Card>
   );
 };

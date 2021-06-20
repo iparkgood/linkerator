@@ -14,7 +14,7 @@ const useStyles = makeStyles({
 
 Modal.setAppElement("#root");
 
-const ModalForm = ({ modalOpen, setModalOpen, link }) => {
+const ModalForm = ({ modalOpen, setModalOpen, link, setLinks, setCount }) => {
   const classes = useStyles();
 
   const [updateURL, setURL] = useState(link.url);
@@ -24,10 +24,13 @@ const ModalForm = ({ modalOpen, setModalOpen, link }) => {
 
     setModalOpen(false);
 
-    console.log(result);
+    setLinks((currentLinks) => {
+      const nonupdatedLinks = currentLinks.filter((cl) => cl.id !== result.id);
 
-    
+      return [...nonupdatedLinks, result];
+    });
 
+    setCount(result.clickCount);
   };
 
   const handleSubmit = (e) => {

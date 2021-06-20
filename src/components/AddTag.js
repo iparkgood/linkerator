@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 
-import { TextField, Button } from "@material-ui/core";
+import { TextField, IconButton } from "@material-ui/core";
 import SendIcon from "@material-ui/icons/Send";
 
 import { createNewTag } from "../api";
@@ -27,9 +27,9 @@ const AddTag = ({ setTags, linkId, setTagOpen }) => {
         value={newTag}
         onChange={(e) => setNewTag(e.target.value)}
       />
-      <Button color="secondary" onClick={handleCreateNewTag}>
+      <IconButton color="secondary" onClick={handleCreateNewTag}>
         <SendIcon />
-      </Button>
+      </IconButton>
     </form>
   );
 };
