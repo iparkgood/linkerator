@@ -1,5 +1,5 @@
 import React from 'react';
-import { AppBar, Toolbar, InputBase } from '@material-ui/core';
+import { AppBar, Toolbar, InputBase, Button } from '@material-ui/core';
 import { fade, makeStyles } from '@material-ui/core/styles';
 
 const useStyles = makeStyles((theme) => ({
@@ -58,6 +58,14 @@ const NavBar = ({ setLinks }) => {
     }
   }
 
+  const sortByClicks = (e) => {
+    setLinks((links) => {
+      const sortedLinksArray = links.sort((a, b) => b.clickCount - a.clickCount)
+      console.log("sorted Clicked", sortedLinksArray)
+      return sortedLinksArray
+    })
+  }
+
   return (
     <AppBar position="sticky">
       <Toolbar className={classes.flex}>
@@ -68,6 +76,7 @@ const NavBar = ({ setLinks }) => {
         <div className={classes.searchBar}>
           <InputBase onChange={handleTagSearch} className={classes.searchInput} placeholder="Search Tags ..." />
         </div>
+        <Button onClick={sortByClicks}>Sort by Clicks</Button>
       </Toolbar>
     </AppBar>
   )
